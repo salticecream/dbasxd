@@ -1,0 +1,208 @@
+DROP SCHEMA IF EXISTS library;
+
+CREATE SCHEMA library;
+
+CREATE TABLE library.books(
+    physical_id INTEGER PRIMARY KEY,
+    isbn INTEGER
+)
+
+CREATE TABLE library.book_data(
+    title VARCHAR(50) NOT NULL,
+    isbn VARCHAR(13),
+    edition SMALLINT,
+    language VARCHAR(20),
+    publisher VARCHAR(50) NOT NULL,
+    pubdate DATE,
+    damaged BOOLEAN
+    PRIMARY KEY (isbn)
+);
+
+
+CREATE TABLE library.authors(
+    id INTEGER PRIMARY KEY,
+    name VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE library.book_authors(
+    physical_id INTEGER,
+    author_id INTEGER,
+    PRIMARY KEY (physical_id, author_id)
+);
+
+CREATE TABLE library.genres(
+    name VARCHAR(50) PRIMARY KEY
+);
+
+CREATE TABLE library.book_genres(
+    physical_id INTEGER,
+    genre VARCHAR(50),
+    PRIMARY KEY (physical_id, genre)
+);
+
+CREATE TABLE library.prequels(
+    id INTEGER PRIMARY KEY,
+    name VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE library.book_prequels(
+    physical_id INTEGER,
+    prequel_id INTEGER,
+    PRIMARY KEY (physical_id, prequel_id)
+);
+
+CREATE TABLE library.users(
+    id INTEGER PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    address VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE library.students(
+    id INTEGER PRIMARY KEY,
+    programme VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE library.admins(
+    id INTEGER PRIMARY KEY,
+    phone_number VARCHAR(10) UNIQUE NOT NULL,
+    department VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE library.borrows(
+    borrow_id INTEGER PRIMARY KEY,
+    book_physical_id INTEGER,
+    user_id INTEGER,
+    borrow_date DATE,
+    due_date DATE,
+    return_date DATE
+);
+
+CREATE TABLE library.fines(
+    borrow_id INTEGER,
+    amount INTEGER,
+    PRIMARY KEY (borrow_id)
+);
+
+CREATE TABLE library.transactions(
+    transaction_id INTEGER PRIMARY KEY,
+    borrow_id INTEGER,
+    amount INTEGER,
+    payment_date DATE,
+    method VARCHAR(6)
+);
+
+-- foreign keys
+/*
+ALTER TABLE library.book_authors
+ADD CONSTRAINT fk_book_authors_book
+FOREIGN KEY (physical_id)
+REFERENCES library.books(physical_id);
+
+ALTER TABLE library.book_authors
+ADD CONSTRAINT fk_book_authors_author
+FOREIGN KEY (author_id)
+REFERENCES library.authors(id);
+
+ALTER TABLE library.book_genres
+ADD CONSTRAINT fk_book_genres_book
+FOREIGN KEY (physical_id)
+REFERENCES library.books(physical_id);
+
+ALTER TABLE library.book_genres
+ADD CONSTRAINT fk_book_genres_genre
+FOREIGN KEY (genre)
+REFERENCES library.genres(name);
+
+ALTER TABLE library.book_prequels
+ADD CONSTRAINT fk_book_prequels_book
+FOREIGN KEY (physical_id)
+REFERENCES library.books(physical_id);
+
+ALTER TABLE library.book_prequels
+ADD CONSTRAINT fk_book_prequels_prequel
+FOREIGN KEY (prequel_id)
+REFERENCES library.prequels(id);
+
+ALTER TABLE library.students
+ADD CONSTRAINT fk_students_user
+FOREIGN KEY (id)
+REFERENCES library.users(id);
+
+ALTER TABLE library.admins
+ADD CONSTRAINT fk_admins_user
+FOREIGN KEY (id)
+REFERENCES library.users(id);
+
+ALTER TABLE library.borrows
+ADD CONSTRAINT fk_borrows_book
+FOREIGN KEY (book_physical_id)
+REFERENCES library.books(physical_id);
+
+ALTER TABLE library.borrows
+ADD CONSTRAINT fk_borrows_user
+FOREIGN KEY (user_id)
+REFERENCES library.users(id);
+
+ALTER TABLE library.fines
+ADD CONSTRAINT fk_fines_borrow
+FOREIGN KEY (borrow_id)
+REFERENCES library.borrows(borrow_id);
+
+ALTER TABLE library.transactions
+ADD CONSTRAINT fk_transactions_borrow
+FOREIGN KEY (borrow_id)
+REFERENCES library.borrows(borrow_id);
+
+ALTER TABLE library.books
+ADD CONSTRAINT fk_books_book_data
+FOREIGN KEY (isbn)
+REFERENCES library.book_data(isbn);
+*/
+
+INSERT INTO library.book_data (title, isbn, publisher) 
+VALUES ("Love Redesigned", "0000000000001", "Lauren Asher"),
+    ("Iron Flame", "0000000000002", "Rebecca Yarros"),
+    ("Fourth Wing", "0000000000003", "Rebecca Yarros"),
+    ("Resurrection Walk", "0000000000004", "Michael Connelly"),
+    ("The Spy Coast", "0000000000005", "Tess Gerritsen");
+
+INSERT INTO library.books (physical_id, isbn)
+VALUES (0, "0000000000001"),
+    (1, "0000000000001"),
+    (2, "0000000000001"),
+    (3, "0000000000001"),
+    (4, "0000000000001"),
+    (5, "0000000000002"),
+    (6, "0000000000002");
+
+-- 5 students, 1 admin
+INSERT INTO library.users (id, name, email, address)
+VALUES (0, "aaa", "a@a.com", "A Street 1"),
+    (1, "bbb", "b@b.com", "A Street 1"),
+    (2, "ccc", "c@c.com", "A Street 1"),
+    (3, "ddd", "d@d.com", "A Street 1"),
+    (4, "eee", "e@e.com", "A Street 1"),
+    (5, "fffadmin", "admin@f.com", "A Street 1");
+
+-- 5 students
+INSERT INTO library.students (id, programme)
+VALUES (0, "CS"),
+    (1, "CS"),
+    (2, "CS"),
+    (3, "CS"),
+    (4, "CS");
+
+-- and 1 admin
+INSERT INTO library.admins (id, phone_number, department)
+VALUES (5, "0000000000", "Teacher's Department");
+
+INSERT INTO library.borrows (borrow_id, book_physical_id, user_id, borrow_date, due_date, return_date)
+VALUES (0, 0, 0, "1993-10-07", NULL, NULL),
+(1, 1, 0, "2023-11-07", NULL, NULL),
+(2, 2, 0, "2023-11-07", "2023-11-14", "2023-11-08"),
+(3, 3, 0, "2023-11-07", "2023-11-14", "2023-11-08"),
+
+
+INSERT INTO library.fines (borrow_id, amount)
+VALUES (0, 7126324);
