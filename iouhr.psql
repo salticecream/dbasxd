@@ -195,7 +195,7 @@ VALUES (0, 'CS'),
 
 -- and 1 admin
 INSERT INTO library.admins (id, phone_number, department)
-VALUES (5, '0000000000', 'Teacher's Department');
+VALUES (5, '0000000000', 'Teachers Department');
 
 INSERT INTO library.borrows (borrow_id, book_physical_id, user_id, borrow_date, due_date, return_date)
 VALUES (0, 0, 0, '1993-10-07', NULL, NULL),
