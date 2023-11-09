@@ -1,4 +1,4 @@
-DROP SCHEMA IF EXISTS library;
+DROP SCHEMA IF EXISTS library CASCADE;
 
 CREATE SCHEMA library;
 
@@ -161,47 +161,47 @@ REFERENCES library.book_data(isbn);
 */
 
 INSERT INTO library.book_data (title, isbn, publisher) 
-VALUES ("Love Redesigned", "0000000000001", "Lauren Asher"),
-    ("Iron Flame", "0000000000002", "Rebecca Yarros"),
-    ("Fourth Wing", "0000000000003", "Rebecca Yarros"),
-    ("Resurrection Walk", "0000000000004", "Michael Connelly"),
-    ("The Spy Coast", "0000000000005", "Tess Gerritsen");
+VALUES ('Love Redesigned', '0000000000001', 'Lauren Asher'),
+    ('Iron Flame', '0000000000002', 'Rebecca Yarros'),
+    ('Fourth Wing', '0000000000003', 'Rebecca Yarros'),
+    ('Resurrection Walk', '0000000000004', 'Michael Connelly'),
+    ('The Spy Coast', '0000000000005', 'Tess Gerritsen');
 
 INSERT INTO library.books (physical_id, isbn)
-VALUES (0, "0000000000001"),
-    (1, "0000000000001"),
-    (2, "0000000000001"),
-    (3, "0000000000001"),
-    (4, "0000000000001"),
-    (5, "0000000000002"),
-    (6, "0000000000002");
+VALUES (0, '0000000000001'),
+    (1, '0000000000001'),
+    (2, '0000000000001'),
+    (3, '0000000000001'),
+    (4, '0000000000001'),
+    (5, '0000000000002'),
+    (6, '0000000000002');
 
 -- 5 students, 1 admin
 INSERT INTO library.users (id, name, email, address)
-VALUES (0, "aaa", "a@a.com", "A Street 1"),
-    (1, "bbb", "b@b.com", "A Street 1"),
-    (2, "ccc", "c@c.com", "A Street 1"),
-    (3, "ddd", "d@d.com", "A Street 1"),
-    (4, "eee", "e@e.com", "A Street 1"),
-    (5, "fffadmin", "admin@f.com", "A Street 1");
+VALUES (0, 'aaa', 'a@a.com', 'A Street 1'),
+    (1, 'bbb', 'b@b.com', 'A Street 1'),
+    (2, 'ccc', 'c@c.com', 'A Street 1'),
+    (3, 'ddd', 'd@d.com', 'A Street 1'),
+    (4, 'eee', 'e@e.com', 'A Street 1'),
+    (5, 'fffadmin', 'admin@f.com', 'A Street 1');
 
 -- 5 students
 INSERT INTO library.students (id, programme)
-VALUES (0, "CS"),
-    (1, "CS"),
-    (2, "CS"),
-    (3, "CS"),
-    (4, "CS");
+VALUES (0, 'CS'),
+    (1, 'CS'),
+    (2, 'CS'),
+    (3, 'CS'),
+    (4, 'CS');
 
 -- and 1 admin
 INSERT INTO library.admins (id, phone_number, department)
-VALUES (5, "0000000000", "Teacher's Department");
+VALUES (5, '0000000000', 'Teacher's Department');
 
 INSERT INTO library.borrows (borrow_id, book_physical_id, user_id, borrow_date, due_date, return_date)
-VALUES (0, 0, 0, "1993-10-07", NULL, NULL),
-(1, 1, 0, "2023-11-07", NULL, NULL),
-(2, 2, 0, "2023-11-07", "2023-11-14", "2023-11-08"),
-(3, 3, 0, "2023-11-07", "2023-11-14", "2023-11-08"),
+VALUES (0, 0, 0, '1993-10-07', NULL, NULL),
+(1, 1, 0, '2023-11-07', NULL, NULL),
+(2, 2, 0, '2023-11-07', '2023-11-14', '2023-11-08'),
+(3, 3, 0, '2023-11-07', '2023-11-14', '2023-11-08'),
 
 
 INSERT INTO library.fines (borrow_id, amount)
