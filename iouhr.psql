@@ -5,7 +5,7 @@ CREATE SCHEMA library;
 CREATE TABLE library.books(
     physical_id INTEGER PRIMARY KEY,
     isbn INTEGER
-)
+);
 
 CREATE TABLE library.book_data(
     title VARCHAR(50) NOT NULL,
@@ -14,7 +14,7 @@ CREATE TABLE library.book_data(
     language VARCHAR(20),
     publisher VARCHAR(50) NOT NULL,
     pubdate DATE,
-    damaged BOOLEAN
+    damaged BOOLEAN,
     PRIMARY KEY (isbn)
 );
 
