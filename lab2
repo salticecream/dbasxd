@@ -1,0 +1,6 @@
+-- 1
+
+SELECT DISTINCT b.title, g.genre
+FROM books b
+JOIN genres g ON b.bookid = g.bookid
+ORDER BY b.title ASC;
