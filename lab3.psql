@@ -1,0 +1,163 @@
+-- 1.1: add foreign key constraints
+--
+
+-- resources
+ALTER TABLE Resources
+ADD CONSTRAINT fk_Resources_Books
+FOREIGN KEY (bookID)
+REFERENCES Books (bookID);
+
+-- prequels
+ALTER TABLE Prequels
+ADD CONSTRAINT fk_Prequels_Books 
+FOREIGN KEY (bookID)
+REFERENCES Books (bookID);
+
+ALTER TABLE Prequels
+ADD CONSTRAINT fk_Prequels_Prequel 
+FOREIGN KEY (prequelID)
+REFERENCES Books (bookID);
+
+-- editions
+ALTER TABLE Edition
+ADD CONSTRAINT fk_Edition_Books
+FOREIGN KEY (bookID)
+REFERENCES Books (bookID);
+
+-- authors
+ALTER TABLE Author
+ADD CONSTRAINT fk_Author_Books
+FOREIGN KEY (bookID)
+REFERENCES Books (bookID);
+
+-- genres
+ALTER TABLE Genre
+ADD CONSTRAINT fk_Genre_Book
+FOREIGN KEY (bookID)
+REFERENCES Books (bookID);
+
+-- language
+ALTER TABLE Language
+ADD CONSTRAINT fk_Language_Book
+FOREIGN KEY (bookID)
+REFERENCES Books (bookID);
+
+-- students
+ALTER TABLE Students
+ADD CONSTRAINT fk_Students_Users
+FOREIGN KEY (userID)
+REFERENCES Users (userID);
+
+-- admins
+ALTER TABLE Admins
+ADD CONSTRAINT fk_Admins_Users
+FOREIGN KEY (userID)
+REFERENCES Users (userID);
+
+
+-- borrows
+ALTER TABLE Borrowing
+ADD CONSTRAINT fk_Borrowing_Resources
+FOREIGN KEY (physicalID)
+REFERENCES Resources (physicalID);
+
+ALTER TABLE Borrowing
+ADD CONSTRAINT fk_Borrowing_Users
+FOREIGN KEY (userID)
+REFERENCES Users (userID);
+
+-- fines
+ALTER TABLE Fines
+ADD CONSTRAINT fk_Fines_Borrowing
+FOREIGN KEY (borrowID)
+REFERENCES Borrowing (borrowID);
+
+-- transactions
+ALTER TABLE Transactions
+ADD CONSTRAINT fk_Transactions_Borrowing
+FOREIGN KEY (borrowID)
+REFERENCES Borrowing (borrowID);
+
+
+-- 1.2: add not null constraints
+-- dont need names cuz changing this is easy
+
+-- boooks
+ALTER TABLE Books
+ALTER COLUMN title SET NOT NULL,
+ALTER COLUMN pages SET NOT NULL;
+
+-- edition
+ALTER TABLE Edition
+ALTER COLUMN isbn SET NOT NULL;
+
+-- user
+ALTER TABLE Users
+ALTER COLUMN name SET NOT NULL,
+ALTER COLUMN address SET NOT NULL,
+ALTER COLUMN email SET NOT NULL;
+
+-- students
+ALTER TABLE Students
+ALTER COLUMN program SET NOT NULL;
+
+-- admins
+ALTER TABLE Users
+ALTER COLUMN department SET NOT NULL,
+ALTER COLUMN phoneNumber SET NOT NULL,
+ALTER COLUMN email SET NOT NULL;
+
+-- borrowing
+ALTER TABLE Borrowing
+ALTER COLUMN physicalID SET NOT NULL,
+ALTER COLUMN userID SET NOT NULL;
+
+-- fines
+ALTER TABLE Fines
+ALTER COLUMN amount SET NOT NULL;
+
+-- transactions
+ALTER TABLE Transactions
+ALTER COLUMN borrowingID SET NOT NULL,
+ALTER COLUMN paymentMethod SET NOT NULL,
+ALTER COLUMN DoP SET NOT NULL;
+
+
+-- 1.3: check constraints
+-- fines, pages, editions > 0
+-- DoR >= DoB
+-- email addresses must end w "@kth.se"
+
+-- >= 0
+ALTER TABLE Fines
+ADD CONSTRAINT check_fines_positive 
+CHECK (amount >= 0);
+
+ALTER TABLE Books
+ADD CONSTRAINT check_pages_positive
+CHECK (pages > 0);
+
+ALTER TABLE Edition
+ADD CONSTRAINT check_edition_positive
+check (edition > 0);
+
+
+-- DoR >= DoB
+ALTER TABLE Borrowing
+ADD CONSTRAINT check_dor_dob
+CHECK (dor > dob);
+
+-- @kth.se
+ALTER TABLE Users
+ADD CONSTRAINT check_email_kth
+CHECK (email like "%kth.se");
+
+
+
+
+
+
+
+
+
+
