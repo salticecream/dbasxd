@@ -1,0 +1,31 @@
+-- 1
+
+SELECT c.Name AS name, 
+    COUNT(DISTINCT CASE WHEN b.Country1 = c.Code THEN b.Country2 ELSE b.Country1 END) AS num -- matches the country code to the correct name
+FROM Country c
+LEFT JOIN borders b ON c.Code = b.Country1 OR c.Code = b.Country2
+GROUP BY c.Name
+HAVING COUNT(DISTINCT CASE WHEN b.Country1 = c.Code THEN b.Country2 ELSE b.Country1 END) > 0
+ORDER BY num ASC, name ASC;
+
+
+
+-- 2
+SELECT s.Language AS language, ROUND(SUM(s.Percentage * c.Population / 100)) AS numberspeaker
+FROM Spoken s
+JOIN Country c ON s.Country = c.Code
+GROUP BY s.Language
+HAVING (SUM(s.Percentage * c.Population / 100) > 0)
+ORDER BY numberspeaker DESC;
+
+-- 3
+SELECT b.Country1 AS country1,
+       e1.GDP AS gdp1,
+       b.Country2 AS country2,
+       e2.GDP AS gdp2,
+       ROUND(CASE WHEN e1.GDP > e2.GDP THEN e1.GDP / e2.GDP ELSE e2.GDP / e1.GDP END) AS ratio
+FROM borders b
+JOIN Economy e1 ON b.Country1 = e1.Country
+JOIN Economy e2 ON b.Country2 = e2.Country
+WHERE e1.GDP > 0 AND e2.GDP > 0
+ORDER BY ratio DESC;
