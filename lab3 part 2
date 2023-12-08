@@ -1,13 +1,21 @@
 -- 1
 
-SELECT c.Name AS name, 
-    COUNT(CASE WHEN b.Country1 = c.Code THEN b.Country2 ELSE b.Country1 END) AS num
+SELECT subquery.name AS name, subquery.num AS num FROM 
+
+(SELECT c.Name AS name, 
+    COUNT(CASE WHEN b.Country1 = c.Code THEN b.Country2 ELSE b.Country1 END) AS num,
     -- count the country as having a border if it's country1 or country2 in borders. 
+    RANK () OVER (
+        ORDER BY COUNT(CASE WHEN b.country1 = c.Code THEN b.Country2 ELSE B.Country1 END)
+    ) rank_number
+    -- we then rank the countries since we only need to select the countries with rank 1 (that is, the countries
+    -- with the lowest amount of borders).
 FROM Country c
 JOIN borders b ON c.Code = b.Country1 OR c.Code = b.Country2 -- match the given country with its name in Country. 
 GROUP BY c.Name
-HAVING COUNT(CASE WHEN b.Country1 = c.Code THEN b.Country2 ELSE b.Country1 END) > 0 -- num must not be null
-ORDER BY num ASC, name ASC;
+ORDER BY num ASC, name ASC) AS subquery
+
+WHERE subquery.rank_number = 1;
 
 -- 2
 SELECT s.Language AS language, ROUND(SUM(s.Percentage * c.Population / 100)) AS numberspeaker
